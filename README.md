@@ -48,7 +48,7 @@ timeout should be an **absolute value** if it isn't the program will throw an er
 
 ## Credits
 ```
-https://github.com/xorV2
+https://github.com/XorV2
 ```
 
 
