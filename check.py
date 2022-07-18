@@ -6,23 +6,12 @@ from concurrent.futures import ThreadPoolExecutor
 from socks import (
     HTTP,
     SOCKS4,
-    SOCKS4_ERRORS,
     SOCKS5,
-    GeneralProxyError,
-    HTTPError,
-    ProxyConnectionError,
-    ProxyError,
-    SOCKS4Error,
-    SOCKS5Error,
     socksocket,
 )
 
-TEST_HOST = "www.google.com"
-
 
 class CheckSingle:
-    user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.114 Safari/537.36"
-
     def __init__(self, host, port, timeout=1):
         self.host = host
         self.port = port
@@ -39,16 +28,14 @@ class CheckSingle:
             try:
                 sock.set_proxy(HTTP, self.host, self.port)
                 sock.settimeout(self.timeout)
-                sock.connect((TEST_HOST, 80))
+                sock.connect(("www.google.com", 80))
                 sock.sendall(
-                    f"GET / HTTP/1.1\r\nHost: google.com\r\nUser-Agent: {self.user_agent}\r\nConnection: keep-alive\r\n\r\n".encode()
+                    f"GET / HTTP/1.1\r\nHost: www.google.com\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.114 Safari/537.36\r\nConnection: keep-alive\r\n\r\n".encode()
                 )
-
-            except (ProxyConnectionError, GeneralProxyError, HTTPError, ProxyError):
-                return False
-
-            else:
                 return True
+
+            except:
+                return False
 
     def check_socks4(self):
         """
@@ -64,12 +51,10 @@ class CheckSingle:
                 sock.set_proxy(SOCKS4, self.host, self.port)
                 sock.connect(("1.1.1.1", 80))
                 sock.send(b"Hello, world!")
-
-            except (GeneralProxyError, ProxyConnectionError, ProxyError, SOCKS4Error):
-                return False
-
-            else:
                 return True
+
+            except:
+                return False
 
     def check_socks5(self):
         """
@@ -85,25 +70,23 @@ class CheckSingle:
                 sock.set_proxy(SOCKS5, self.host, self.port)
                 sock.connect(("1.1.1.1", 80))
                 sock.send(b"Hello, world!")
-
-            except (GeneralProxyError, ProxyConnectionError, ProxyError, SOCKS5Error):
-                return False
-
-            else:
                 return True
+
+            except:
+                return False
 
 
 class CheckFile:
-    def __init__(self, filename, path="", timeout=1, max_threads=1000):
-        with open(f"{path}{filename}", "r") as f:
-            self.contents = [line.strip("\n") for line in f.readlines()]
+    def __init__(self, filename, timeout=1, max_threads=1000):
+        with open(filename, "r") as f:
+            self.contents = f.readlines()
 
         self.max_threads = max_threads
         self.working = []
         self.timeout = timeout
 
     @staticmethod
-    def _format_proxies(proxies: list[str]) -> dict[str, int]:
+    def _format_proxies(proxies):
         """
         takes a list of proxies and returns a dictionary of:
           {ip:port}
@@ -115,7 +98,7 @@ class CheckFile:
             # part_proxy[0] is the ip address of the proxy
             # part_proxy[1] is the partition character, ':'
             # part_proxy[2] is the port number of the proxy server
-            formatted_proxies[part_proxy[0]] = int(part_proxy[2])
+            formatted_proxies[part_proxy[0]] = int(part_proxy[2].strip("\n"))
 
         return formatted_proxies
 
@@ -144,7 +127,9 @@ class CheckFile:
 
     def check_http(self):
         """
-        write this documentation
+        for each proxy in the file check if the proxy works
+        correctly. Read the CheckSingle.check_http docstring
+        for more information.
         """
 
         self.content = self._format_proxies(self.contents)
@@ -157,7 +142,9 @@ class CheckFile:
 
     def check_socks5(self):
         """
-        write this documentation
+        for each proxy in the file check if the proxy works
+        correctly. Read the CheckSingle.check_socks5 docstring
+        for more information.
         """
 
         self.content = self._format_proxies(self.contents)
@@ -170,7 +157,9 @@ class CheckFile:
 
     def check_socks4(self):
         """
-        write this documentation
+        for each proxy in the file check if the proxy works
+        correctly. Read the CheckSingle.check_socks4 docstring
+        for more information.
         """
 
         self.content = self._format_proxies(self.contents)
