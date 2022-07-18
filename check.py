@@ -37,7 +37,7 @@ class CheckSingle:
 
         with socksocket() as sock:
             try:
-                sock.setproxy(HTTP, self.host, self.port)
+                sock.set_proxy(HTTP, self.host, self.port)
                 sock.settimeout(self.timeout)
                 sock.connect((TEST_HOST, 80))
                 sock.sendall(
@@ -61,7 +61,7 @@ class CheckSingle:
         with socksocket() as sock:
             try:
                 sock.settimeout(self.timeout)
-                sock.setproxy(SOCKS4, self.host, self.port)
+                sock.set_proxy(SOCKS4, self.host, self.port)
                 sock.connect(("1.1.1.1", 80))
                 sock.send(b"Hello, world!")
 
@@ -82,7 +82,7 @@ class CheckSingle:
         with socksocket() as sock:
             try:
                 sock.settimeout(self.timeout)
-                sock.setproxy(SOCKS5, self.host, self.port)
+                sock.set_proxy(SOCKS5, self.host, self.port)
                 sock.connect(("1.1.1.1", 80))
                 sock.send(b"Hello, world!")
 
@@ -138,7 +138,7 @@ class CheckFile:
             if CheckSingle(ip, port, timeout=self.timeout).check_socks5():
                 self.working.append(f"{ip}:{port}")
 
-        elif type == "socks4":
+        else:
             if CheckSingle(ip, port, timeout=self.timeout).check_socks4():
                 self.working.append(f"{ip}:{port}")
 
