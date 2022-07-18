@@ -1,5 +1,5 @@
 # proxy-checker
-proxy checker is an open-source module used to check all types of proxies.
+proxy checker is an open-source module used to check all types of proxies. Make sure that you have the requirements installed using ```pip3 install -r requirements.txt```
 
 This is the code to check just 1 proxy
 
