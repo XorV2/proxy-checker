@@ -9,7 +9,7 @@ from check import CheckSingle
 IP = "proxyip"
 PORT = int("proxyport")
 
-works = CheckSingle("proxyip", int("proxyport"))
+works = CheckSingle(IP, PORT)
 
 if works.check_http():
     print(f"{IP}:{PORT} is a working HTTP proxy")
