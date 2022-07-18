@@ -44,4 +44,4 @@ if works.check_http():
     print(f"proxy responded in under x seconds")
 
 ```
-timeout should be an **integer**
+timeout should be an **absolute value** if it isn't the program will throw an error because the module will not fix your horrid code logic.
