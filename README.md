@@ -45,3 +45,12 @@ if works.check_http():
 
 ```
 timeout should be an **absolute value** if it isn't the program will throw an error because the module will not fix your horrid code logic.
+
+## Credits
+```
+https://github.com/xorV2
+```
+
+
+### Contributions 🎉
+###### All contributions are accepted, simply open an Issue / Pull request.
