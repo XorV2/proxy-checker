@@ -92,7 +92,9 @@ class CheckFile:
           {ip:port}
         """
 
-        formatted_proxies = dict()
+        formatted_proxies = {
+            part_proxy[0]: int(part_proxy[2]) for part_proxy in proxies
+        }
         for proxy in proxies:
             part_proxy = proxy.partition(":")
             # part_proxy[0] is the ip address of the proxy
