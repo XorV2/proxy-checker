@@ -26,8 +26,22 @@ if the proxy does not throw an exception whilst trying to perform something it i
 
 # How do i check a file?
 ```python
-proxies = CheckFile("http_proxies.txt", timeout=5).check_http()
+from check import CheckFile
+
+proxies : list[str] = CheckFile("http_proxies.txt").check_http()
 
 for proxy in proxies:
-    print(f"{proxy} responds in under 5 seconds!")
+    print(f"{proxy} is a working http proxy")
 ```
+
+CheckFile().check_x() will return a list of all of the proxies in the file that responded without throwing an exception.
+
+# How do i set a timeout
+```python
+works = CheckSingle("proxyip", int("proxyport"), timeout=int("proxytimeout"))
+
+if works.check_http():
+    print(f"proxy responded in under x seconds")
+
+```
+timeout should be an **integer**
