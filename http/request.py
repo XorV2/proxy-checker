@@ -2,9 +2,9 @@ CORRECT_STRING = '<a href="https://www.google.com/?gws_rd=ssl">here</a>.'
 
 def _returned_correct_data(data) -> bool:
     """
-    Write this doc-string.
+    Checks if the data is correct by checking if the correct
+    string is returned. If the correct string is returned
+    the function returns true. Otherwise it returns false.
     """
 
-    if CORRECT_STRING in data:
-        return True
-    return False
+    return CORRECT_STRING in data
