@@ -20,6 +20,7 @@
 # encoding='utf-8'
 
 from concurrent.futures import ThreadPoolExecutor
+from http.request import _returned_correct_data
 
 from socks import (
     HTTP,
@@ -50,7 +51,10 @@ class CheckSingle:
                 sock.sendall(
                     f"GET / HTTP/1.1\r\nHost: www.google.com\r\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.114 Safari/537.36\r\nConnection: keep-alive\r\n\r\n".encode()
                 )
-                return True
+                data = sock.recv(1024).decode().lower()
+                if _returned_correct_data(data):
+                    return True
+                return False
 
             except:
                 return False
@@ -110,9 +114,7 @@ class CheckFile:
           {ip:port}
         """
 
-        formatted_proxies = {
-            part_proxy[0]: int(part_proxy[2]) for part_proxy in proxies
-        }
+        formatted_proxies = dict()
         for proxy in proxies:
             part_proxy = proxy.partition(":")
             # part_proxy[0] is the ip address of the proxy
